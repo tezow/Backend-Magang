@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lampiran Foto Dokumentasi</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 15mm 15mm 20mm 15mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header-main {
+      background-color: #dc2626;
+      color: #ffffff;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+
+    .footer {
+      margin-top: 30px;
+      font-size: 9px;
+      color: #888;
+      text-align: center;
+      border-top: 1px solid #eee;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    .watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 400px;
+      transform: translate(-50%, -50%);
+      opacity: 0.05;
+      z-index: -1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  {% if watermark_logo_path %}
+  <img src="{{ watermark_logo_path }}" class="watermark" alt="watermark" />
+  {% endif %}
+
+  <div class="header-main" style="margin-bottom: 16px;">
+    <table style="width: 100%; border: none; border-collapse: collapse;">
+      <tr>
+        <td style="width: 15%; border: none; vertical-align: middle;">
+          <img src="{{ alfamart_logo_path }}" alt="Alfamart Logo" style="height: 38px;">
+        </td>
+        <td style="width: 70%; text-align: center; border: none; vertical-align: middle;">
+          <div style="font-size: 16px; font-weight: bold; color: #fff; letter-spacing: 1.5px;">LAMPIRAN FOTO DOKUMENTASI</div>
+          <div style="font-size: 10px; color: rgba(255,255,255,0.85); margin-top: 2px;">FORM PERMINTAAN DESAIN (FPD)</div>
+        </td>
+        <td style="width: 15%; text-align: right; border: none; vertical-align: middle;">
+          <img src="{{ sparta_logo_path }}" alt="Sparta Logo" style="height: 32px;">
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div style="margin-top: 20px;">
+    {% if projek.foto_items and projek.foto_items.length > 0 %}
+      {% for foto in projek.foto_items %}
+        {% if foto.item_index == 39 %}
+          <div style="display:block; width:100%; margin: 18px 0 10px 0; padding: 8px 10px; background:#fee2e2; color:#991b1b; border-left: 5px solid #dc2626; font-size: 13px; font-weight: bold; page-break-inside: avoid;">
+            Dokumentasi Head to Head Kompetitor
+          </div>
+        {% endif %}
+        <div style="display: inline-block; width: 48%; border: 1px solid #000; margin-bottom: 15px; margin-right: 1%; vertical-align: top; page-break-inside: avoid;">
+          <div style="background-color: #f1f5f9; padding: 5px; font-weight: bold; border-bottom: 1px solid #000; font-size: 11px; text-align: center;">
+            {{ foto.item_index }}. {{ foto.label or ('Titik ' + foto.item_index) }}
+          </div>
+          <div style="padding: 5px; text-align: center; height: 250px; display: flex; align-items: center; justify-content: center; background: #f9f9f9;">
+            {% if foto.base64 %}
+              <img src="{{ foto.base64 }}" style="max-width: 100%; max-height: 240px; object-fit: contain;" />
+            {% else %}
+              <span style="color: #999; font-size: 10px; font-style: italic;">Gambar tidak tersedia</span>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div style="text-align: center; color: #666; margin-top: 50px; font-size: 12px; font-style: italic;">
+        Tidak ada lampiran foto dokumentasi untuk pengajuan ini.
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="footer">
+    No. Laporan: {{ projek.id }} — Dokumen ini di-generate otomatis oleh sistem SPARTA Building pada {{ generated_at }}
+  </div>
+</body>
+</html>

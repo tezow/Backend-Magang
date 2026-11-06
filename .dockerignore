@@ -1,0 +1,16 @@
+.git
+.github
+node_modules
+dist
+coverage
+
+.env
+.env.*
+sparta-be.env
+token.json
+token_doc.json
+*.pem
+*.log
+
+Dockerfile
+.dockerignore

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Rekapitulasi RAB</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2.5cm 2cm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            font-size: 10px;
+        }
+
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 240px;
+            transform: translate(-50%, -50%);
+            opacity: 0.10;
+            z-index: -1;
+        }
+
+        .header-company p { margin: 0; font-size: 12px; font-weight: bold; }
+        .header-title { text-align: center; margin: 20px 0; }
+        .header-title h1 { font-size: 18px; margin: 0; text-decoration: underline; }
+        .section-info table { width: 100%; border-collapse: collapse; }
+        .section-info td { padding: 2px 0; }
+
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9px;
+            margin-top: 10px;
+        }
+
+        .price-table th, .price-table td {
+            border: 1px solid #333;
+            padding: 4px;
+            text-align: center;
+        }
+
+        .price-table th { background-color: #e0ffff; font-weight: bold; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+
+        .grand-total-table {
+            margin-top: 20px;
+            width: 50%;
+            float: right;
+            border: none;
+            font-size: 10px;
+        }
+
+        .grand-total-table td {
+            border: 1px solid #ddd;
+            padding: 4px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .grand-total-table td:first-child { border: none; }
+        .total-amount-cell { background-color: #e0ffff; }
+    </style>
+</head>
+<body>
+    {% if watermark_logo_path %}
+    <img src="{{ watermark_logo_path }}" class="watermark" alt="watermark" />
+    {% endif %}
+
+    <div class="header-company">
+        <p>{{ nama_pt }}</p>
+        <p>Cabang {{ data.Cabang }}</p>
+    </div>
+
+    <div class="header-title">
+        <h1>REKAPITULASI RENCANA ANGGARAN BIAYA</h1>
+    </div>
+
+    <div class="section-info">
+        <table>
+            <tr><td style="width:30%;">NOMOR ULOK</td><td style="width:2%;">:</td><td>{{ data.NomorUlok }}</td></tr>
+            <tr><td>NAMA TOKO</td><td>:</td><td>{{ data.nama_toko }}</td></tr>
+            <tr><td>PROYEK</td><td>:</td><td>{{ data.Proyek }}</td></tr>
+            <tr><td>ALAMAT TOKO</td><td>:</td><td>{{ data.Alamat }}</td></tr>
+            <tr><td>LINGKUP PEKERJAAN</td><td>:</td><td>{{ data.LingkupPekerjaan }}</td></tr>
+            <tr><td>DURASI PEKERJAAN</td><td>:</td><td>{{ data.DurasiPekerjaan }}</td></tr>
+            <tr><td>KATEGORI LOKASI</td><td>:</td><td>{{ data.KategoriLokasi }}</td></tr>
+            <tr><td>TANGGAL PENGAJUAN</td><td>:</td><td>{{ tanggal_pengajuan }}</td></tr>
+        </table>
+    </div>
+
+    <table class="price-table">
+        <thead>
+            <tr>
+                <th style="width:5%;">NO.</th>
+                <th class="text-left" style="width:45%;">KATEGORI PEKERJAAN</th>
+                <th style="width:15%;">Total Material</th>
+                <th style="width:15%;">Total Upah</th>
+                <th style="width:20%;">Total Harga</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in category_totals_list %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td class="text-left">{{ row.name }}</td>
+                <td class="text-right">{{ row.materialFormatted }}</td>
+                <td class="text-right">{{ row.upahFormatted }}</td>
+                <td class="text-right"><strong>{{ row.totalFormatted }}</strong></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table class="grand-total-table">
+        <tbody>
+            <tr><td>TOTAL (Rp)</td><td class="total-amount-cell">{{ grand_total_formatted }}</td></tr>
+            <tr><td>PEMBULATAN (Rp)</td><td class="total-amount-cell">{{ pembulatan_formatted }}</td></tr>
+            <tr><td>PPN 11% (Rp)</td><td class="total-amount-cell">{{ ppn_formatted }}</td></tr>
+            <tr><td>GRAND TOTAL (Rp)</td><td class="total-amount-cell">{{ final_total_formatted }}</td></tr>
+        </tbody>
+    </table>
+</body>
+</html>

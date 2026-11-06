@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    @page {
+      size: A4;
+      margin: 12mm 12mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      color: #1f2937;
+      margin: 0;
+      position: relative;
+    }
+
+    .watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 240px;
+      transform: translate(-50%, -50%);
+      opacity: 0.08;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .meta {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 14px;
+    }
+
+    .meta td {
+      border: 1px solid #c7cbd1;
+      padding: 6px 9px;
+      vertical-align: top;
+    }
+
+    .meta .label {
+      width: 160px;
+      font-weight: 600;
+      background: #f6f8fb;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 14px 0 7px;
+      color: #e30613;
+      text-transform: uppercase;
+      border-bottom: 1px solid #e30613;
+      padding-bottom: 4px;
+    }
+    
+    .body-text {
+      font-size: 12px;
+      text-align: justify;
+      margin: 0 0 9px;
+      line-height: 1.62;
+    }
+
+    .poin-list {
+      margin: 6px 0 14px 20px;
+      padding: 0;
+      font-size: 12px;
+      line-height: 1.9;
+    }
+    .poin-list li {
+      margin-bottom: 4px;
+    }
+
+    .catatan-box {
+      margin: 7px 0 14px 0;
+      font-size: 12px;
+      line-height: 1.75;
+      border: 1px solid #c7cbd1;
+      padding: 9px 10px;
+      background: #f8fafc;
+      border-radius: 4px;
+    }
+
+    .hormat-kami {
+      margin: 16px 0 0 0;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .signatures {
+      margin-top: 28px;
+      width: 100%;
+      page-break-inside: avoid;
+    }
+
+    .signatures table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 12px 0;
+      text-align: center;
+      table-layout: fixed;
+    }
+
+    .signatures td {
+      vertical-align: top;
+    }
+
+    .signature-card {
+      background: #f8f9fb;
+      min-height: 138px;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .signature-title {
+      background: #e30613;
+      color: #fff;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      padding: 8px 4px;
+      border-bottom: 3px solid #f7c5c8;
+    }
+
+    .signature-body {
+      padding: 12px 12px 10px;
+      min-height: 104px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sig-name {
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .sig-role {
+      font-size: 11px;
+      color: #4b5563;
+      margin-top: 3px;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 7px;
+    }
+
+    .sig-timestamp {
+      font-size: 11px;
+      color: #6b7280;
+      font-style: italic;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer {
+      margin-top: 28px;
+      font-size: 10px;
+      color: #6b7280;
+      text-align: center;
+    }
+    
+    {{ sparta_pdf_css() | safe }}
+
+    .sparta-header {
+      margin-bottom: 18px;
+      min-height: 62px;
+    }
+
+    .signatures {
+      display: block;
+      margin-top: 28px;
+    }
+
+    .signatures table {
+      display: table;
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 12px 0;
+      text-align: center;
+      table-layout: fixed;
+    }
+
+    .signatures td {
+      display: table-cell;
+      width: 50%;
+      padding: 0;
+      vertical-align: top;
+    }
+
+    .signature-card {
+      min-height: 138px;
+    }
+
+    .footer {
+      margin-top: 28px;
+      font-size: 10px;
+      text-align: center;
+      border-top: 1px solid #eeeeee;
+      padding-top: 8px;
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+  {% if logoImageBase64 %}
+  <img src="{{ logoImageBase64 }}" class="watermark" alt="watermark" />
+  {% endif %}
+
+  <div class="content">
+  {{ sparta_header("Surat Peringatan " ~ spLevelRomawi, (nomorUlok and nomorUlok != '-') and (nomorUlok ~ ((namaToko and namaToko != '-') and (" - " ~ namaToko) or "")) or (namaKontraktor or "-")) | safe }}
+
+  <div class="section-title">Informasi Proyek</div>
+  <table class="meta">
+    <tr>
+      <td class="label">Nomor Surat</td>
+      <td>{{ nomorSurat or '-' }}</td>
+      <td class="label">Tanggal Surat</td>
+      <td>{{ tanggalSurat }}</td>
+    </tr>
+    <tr>
+      <td class="label">Nama Kontraktor</td>
+      <td>{{ namaKontraktor or '-' }}</td>
+      <td class="label">Cabang</td>
+      <td>{{ targetCabang or '-' }}</td>
+    </tr>
+    {% if nomorUlok and nomorUlok != '-' %}
+    <tr>
+      <td class="label">Nomor ULOK</td>
+      <td>{{ nomorUlok }}</td>
+      <td class="label">Nama Toko</td>
+      <td>{{ namaToko or '-' }}</td>
+    </tr>
+    <tr>
+      <td class="label">Kode Toko</td>
+      <td>{{ kodeToko or '-' }}</td>
+      <td></td><td></td>
+    </tr>
+    {% endif %}
+    {% if nomorSpk %}
+    <tr>
+      <td class="label">Nomor SPK</td>
+      <td>{{ nomorSpk }}</td>
+      <td class="label">Tanggal SPK</td>
+      <td>{{ tanggalSpk }}</td>
+    </tr>
+    <tr>
+      {% if lingkupPekerjaan and lingkupPekerjaan != '-' %}
+      <td class="label">Lingkup Pekerjaan</td>
+      <td>{{ lingkupPekerjaan }}</td>
+      {% else %}
+      <td></td><td></td>
+      {% endif %}
+      <td></td><td></td>
+    </tr>
+    {% elif lingkupPekerjaan and lingkupPekerjaan != '-' %}
+    <tr>
+      <td class="label">Lingkup Pekerjaan</td>
+      <td colspan="3">{{ lingkupPekerjaan }}</td>
+    </tr>
+    {% endif %}
+  </table>
+
+  <div class="section-title">Isi Peringatan</div>
+
+  {# ---- Paragraph pembuka berbeda-beda sesuai alasan SP ---- #}
+  {% if alasan == 'KETERLAMBATAN' %}
+  <p class="body-text">
+    {% if nomorSpk %}Sehubungan dengan Surat Perintah Kerja No. {{ nomorSpk }}{% if lingkupPekerjaan and lingkupPekerjaan != '-' %} tentang pekerjaan {{ lingkupPekerjaan }}{% endif %}{% if nomorUlok and nomorUlok != '-' %} di Nomor ULOK {{ nomorUlok }}{% if namaToko and namaToko != '-' %} / Toko {{ namaToko }}{% endif %}{% if kodeToko and kodeToko != '-' %} (Kode Toko {{ kodeToko }}){% endif %}{% endif %}{% else %}Berdasarkan hasil evaluasi pelaksanaan pekerjaan{% if lingkupPekerjaan and lingkupPekerjaan != '-' %} {{ lingkupPekerjaan }}{% endif %}{% if nomorUlok and nomorUlok != '-' %} pada Nomor ULOK {{ nomorUlok }}{% if namaToko and namaToko != '-' %} / Toko {{ namaToko }}{% endif %}{% if kodeToko and kodeToko != '-' %} (Kode Toko {{ kodeToko }}){% endif %}{% endif %}{% endif %}, ternyata setelah dilakukan pengecekan masih ada beberapa pekerjaan yang mengalami <strong>keterlambatan penyelesaian</strong> yang tidak sesuai dengan jadwal yang telah disepakati, diantaranya sebagai berikut:
+  </p>
+  {% elif alasan == 'MENOLAK_SPK' %}
+  <p class="body-text">
+    {% if nomorSpk %}Sehubungan dengan Surat Perintah Kerja No. {{ nomorSpk }}{% if lingkupPekerjaan and lingkupPekerjaan != '-' %} tentang pekerjaan {{ lingkupPekerjaan }}{% endif %}{% if nomorUlok and nomorUlok != '-' %} di Nomor ULOK {{ nomorUlok }}{% if namaToko and namaToko != '-' %} / Toko {{ namaToko }}{% endif %}{% if kodeToko and kodeToko != '-' %} (Kode Toko {{ kodeToko }}){% endif %}{% endif %}, bahwa kontraktor tersebut di atas telah <strong>menolak atau tidak bersedia melaksanakan</strong> pekerjaan sesuai dengan SPK yang telah diterbitkan{% else %}Berdasarkan hasil evaluasi pelaksanaan pekerjaan{% if lingkupPekerjaan and lingkupPekerjaan != '-' %} {{ lingkupPekerjaan }}{% endif %}{% if nomorUlok and nomorUlok != '-' %} pada Nomor ULOK {{ nomorUlok }}{% if namaToko and namaToko != '-' %} / Toko {{ namaToko }}{% endif %}{% if kodeToko and kodeToko != '-' %} (Kode Toko {{ kodeToko }}){% endif %}{% endif %}, kontraktor tersebut di atas dinilai <strong>menolak atau tidak bersedia melaksanakan</strong> pekerjaan yang menjadi tanggung jawabnya{% endif %}, diantaranya sebagai berikut:
+  </p>
+  {% elif alasan == 'MANIPULASI' %}
+  <p class="body-text">
+    Berdasarkan hasil pemeriksaan dan temuan di lapangan{% if nomorUlok and nomorUlok != '-' %} pada lokasi {{ nomorUlok }}{% if namaToko and namaToko != '-' %} / Toko {{ namaToko }}{% endif %}{% if kodeToko and kodeToko != '-' %} (Kode Toko {{ kodeToko }}){% endif %}{% endif %}, kontraktor <strong>{{ namaKontraktor }}</strong> terbukti telah melakukan <strong>tindakan manipulasi dan/atau pelanggaran berat</strong> yang bertentangan dengan ketentuan yang berlaku, diantaranya sebagai berikut:
+  </p>
+  {% elif alasan == 'KELALAIAN' %}
+  <p class="body-text">
+    Berdasarkan hasil evaluasi dan/atau pemeriksaan pekerjaan{% if lingkupPekerjaan and lingkupPekerjaan != '-' %} {{ lingkupPekerjaan }}{% endif %}{% if nomorUlok and nomorUlok != '-' %} pada Nomor ULOK {{ nomorUlok }}{% if namaToko and namaToko != '-' %} / Toko {{ namaToko }}{% endif %}{% if kodeToko and kodeToko != '-' %} (Kode Toko {{ kodeToko }}){% endif %}{% endif %}, kontraktor <strong>{{ namaKontraktor }}</strong> dinilai melakukan <strong>kelalaian</strong> yang perlu segera ditindaklanjuti, diantaranya sebagai berikut:
+  </p>
+  {% else %}
+  <p class="body-text">
+    Sehubungan dengan hasil evaluasi kinerja kontraktor <strong>{{ namaKontraktor }}</strong>{% if nomorUlok and nomorUlok != '-' %} pada lokasi {{ nomorUlok }}{% if namaToko and namaToko != '-' %} / Toko {{ namaToko }}{% endif %}{% if kodeToko and kodeToko != '-' %} (Kode Toko {{ kodeToko }}){% endif %}{% endif %}, ditemukan adanya hal-hal yang perlu mendapat perhatian serius dan tindak lanjut segera, diantaranya sebagai berikut:
+  </p>
+  {% endif %}
+
+  <ol class="poin-list">
+    <li><strong>{{ alasanSpText }}</strong></li>
+    {% if catatanList %}
+    {% for item in catatanList %}
+    {% if item | trim %}
+    <li>{{ item | trim }}</li>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+  </ol>
+
+  {% if instruksiTindakLanjut %}
+  <div class="section-title">Instruksi Tindak Lanjut</div>
+  <div class="catatan-box">
+    {{ instruksiTindakLanjut | replace("\n", "<br>") | safe }}
+    {% if deadlineTindakLanjut and deadlineTindakLanjut != '-' %}
+    <br><br><strong>Batas Waktu:</strong> {{ deadlineTindakLanjut }}
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <p class="body-text">
+    Kami menghimbau kepada Bapak/Ibu untuk menindaklanjuti perihal ketidaksesuaian diatas. Jika Bapak/Ibu tidak dapat memenuhi kewajiban tersebut, maka kami akan memberikan sanksi/denda sesuai dengan ketentuan yang sudah tertulis di dalam Perjanjian.
+  </p>
+
+  <p class="body-text">
+    Demikian Surat Peringatan {{ spLevelRomawi }} ini kami sampaikan. Atas perhatian dan kerjasamanya kami ucapkan terimakasih.
+  </p>
+
+  <p class="body-text hormat-kami">
+    Hormat kami,<br>
+    <strong>PT SUMBER ALFARIA TRIJAYA TBK</strong>
+  </p>
+
+  <div class="signatures">
+    <table>
+      <tr>
+        <td>
+          <div class="signature-card">
+            <div class="signature-title">DIBUAT</div>
+            <div class="signature-body">
+              <div class="sig-timestamp">
+                {{ submittedAtText or "" }}
+              </div>
+              <div>
+                <div class="sig-name">{{ submittedBy }}</div>
+                <div class="sig-role">Branch Building Coordinator</div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="signature-card">
+            <div class="signature-title">Menyetujui</div>
+            <div class="signature-body">
+              <div class="sig-timestamp">
+                {{ approvedAtText or "" }}
+              </div>
+              <div>
+                <div class="sig-name">{{ approvedBy or "" }}</div>
+                <div class="sig-role">{% if approvedBy %}Branch Building &amp; Maintenance Manager{% endif %}</div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    Dokumen ini di-generate otomatis oleh sistem SPARTA Building pada {{ tanggalSurat }}
+  </div>
+
+  {% if lampiranImages and lampiranImages.length > 0 %}
+  {% for img in lampiranImages %}
+  <div class="page-break"></div>
+  {{ sparta_header("Surat Peringatan " ~ spLevelRomawi ~ " - Lampiran", (nomorUlok and nomorUlok != '-') and (nomorUlok ~ ((namaToko and namaToko != '-') and (" - " ~ namaToko) or "")) or (namaKontraktor or "-")) | safe }}
+  
+  <div class="section-title">Lampiran Gambar</div>
+  <div style="text-align: center; margin-top: 20px;">
+    <img src="{{ img }}" style="max-width: 100%; max-height: 800px; object-fit: contain; border: 1px solid #c7cbd1; padding: 4px; background: #fff;" alt="Lampiran" />
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  {% if generatePdfHeaderTemplate %}
+  <div class="page-break"></div>
+  {{ sparta_header("Surat Peringatan " ~ spLevelRomawi ~ " - Lampiran", (nomorUlok and nomorUlok != '-') and (nomorUlok ~ ((namaToko and namaToko != '-') and (" - " ~ namaToko) or "")) or (namaKontraktor or "-")) | safe }}
+  <div class="section-title">Lampiran Dokumen</div>
+  {% endif %}
+
+  </div>
+</body>
+</html>

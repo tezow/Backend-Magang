@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    @page {
+      size: A4;
+      margin: 16mm 12mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #1f2937;
+      margin: 0;
+      position: relative;
+    }
+
+    .watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 260px;
+      transform: translate(-50%, -50%);
+      opacity: 0.08;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      margin-bottom: 14px;
+    }
+
+    .topbar {
+      background: #d21f1f;
+      border-radius: 6px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .topbar-divider {
+      width: 1px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .topbar-left,
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .topbar-right {
+      margin-left: 6px;
+      flex: 1;
+    }
+
+    .brand-logo {
+      height: 28px;
+      width: auto;
+    }
+
+    .sparta-logo {
+      height: 28px;
+      width: auto;
+    }
+
+    .sparta-text {
+      color: #ffffff;
+      font-weight: 700;
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+
+    .sparta-subtext {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    .header-text {
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      color: #475569;
+      font-size: 12px;
+    }
+
+    .title-rule {
+      height: 2px;
+      background: #0f172a;
+      margin: 8px auto 0;
+      width: 100%;
+    }
+
+    .meta {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+
+    .meta td {
+      border: 1px solid #c7cbd1;
+      padding: 6px 8px;
+      vertical-align: top;
+    }
+
+    .meta .label {
+      width: 170px;
+      font-weight: 600;
+      background: #f8fafc;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 10px 0 6px;
+      text-transform: uppercase;
+      border-bottom: 1px solid #0f172a;
+      padding-bottom: 4px;
+    }
+
+    .photo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .photo-item {
+      width: calc(50% - 6px);
+      border: 1px solid #cbd5f5;
+      border-radius: 10px;
+      padding: 8px;
+      background: #f8fafc;
+      page-break-inside: avoid;
+      box-sizing: border-box;
+    }
+
+    .photo-item-title {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #0f172a;
+      text-transform: uppercase;
+    }
+
+    .photo-item img {
+      width: 100%;
+      height: 220px;
+      object-fit: contain;
+      display: block;
+      background: #ffffff;
+      border-radius: 8px;
+    }
+
+    .footer {
+      margin-top: 12px;
+      font-size: 10px;
+      color: #64748b;
+      text-align: right;
+    }
+    {{ sparta_pdf_css() | safe }}
+  </style>
+</head>
+<body>
+  {% if watermark_logo_path %}
+  <img src="{{ watermark_logo_path }}" class="watermark" alt="watermark" />
+  {% endif %}
+
+  <div class="content">
+    {{ sparta_header("Dokumentasi Bangunan", dokumentasi.nomor_ulok ~ " - " ~ (dokumentasi.nama_toko or '-')) | safe }}
+
+    <div class="section-title">Informasi Dokumentasi Bangunan</div>
+    <table class="meta">
+      <tr>
+        <td class="label">Nomor ULOK</td>
+        <td>{{ dokumentasi.nomor_ulok or '-' }}</td>
+        <td class="label">Jenis Toko</td>
+        <td>{{ dokumentasi.jenis_toko or 'REGULAR' }}</td>
+      </tr>
+      <tr>
+        <td class="label">Nama Toko</td>
+        <td>{{ dokumentasi.nama_toko or '-' }}</td>
+        <td class="label">Kode Toko</td>
+        <td>{{ dokumentasi.kode_toko or '-' }}</td>
+      </tr>
+      <tr>
+        <td class="label">Cabang</td>
+        <td>{{ dokumentasi.cabang or '-' }}</td>
+        <td class="label">Tanggal Go</td>
+        <td>{{ tanggal_go_formatted }}</td>
+      </tr>
+      <tr>
+        <td class="label">Tanggal Ambil Foto</td>
+        <td>{{ tanggal_ambil_foto_formatted }}</td>
+        <td class="label">Tanggal Serah Terima</td>
+        <td>{{ tanggal_serah_terima_formatted }}</td>
+      </tr>
+      <tr>
+        <td class="label">PIC Dokumentasi</td>
+        <td>{{ dokumentasi.pic_dokumentasi or '-' }}</td>
+        <td class="label">Email Pengirim</td>
+        <td>{{ dokumentasi.email_pengirim or '-' }}</td>
+      </tr>
+      <tr>
+        <td class="label">SPK Awal</td>
+        <td>{{ dokumentasi.spk_awal or '-' }}</td>
+        <td class="label">SPK Akhir</td>
+        <td>{{ dokumentasi.spk_akhir or '-' }}</td>
+      </tr>
+      <tr>
+        <td class="label">Kontraktor</td>
+        <td colspan="3">{{ dokumentasi.kontraktor_sipil or dokumentasi.kontraktor_me or '-' }}</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Lampiran Foto Dokumentasi</div>
+
+    {% if photo_items.length == 0 %}
+      <div>Tidak ada foto dokumentasi.</div>
+    {% endif %}
+
+    <div class="photo-grid">
+      {% for photo in photo_items %}
+      <div class="photo-item">
+        <div class="photo-item-title">
+          {{ photo.item_index or photo.index }}. {{ photo.sudut_foto or ('Foto ' ~ (photo.item_index or photo.index)) }}
+        </div>
+        {% if photo.base64 %}
+          <img src="{{ photo.base64 }}" alt="foto" />
+        {% else %}
+          <div style="height:220px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:8px;color:#64748b;text-align:center;padding:0 12px;">
+            Foto tidak dapat dimuat saat PDF dibuat
+          </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="footer">Dokumen ini di-generate otomatis oleh sistem SPARTA Building pada {{ generated_at }}</div>
+  </div>
+</body>
+</html>

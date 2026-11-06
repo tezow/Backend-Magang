@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Surat Peringatan - Action Required</title>
+</head>
+<body style="margin:0; padding:0; font-family: Arial, Helvetica, sans-serif; background:#f5f5f5;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f5f5f5; padding:24px;">
+        <tr>
+            <td align="center">
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                    <!-- Header with Alfamart branding -->
+                    <tr>
+                        <td style="background:#E31E24; padding:20px 24px; text-align:center;">
+                            <h1 style="margin:0; font-size:24px; color:#ffffff; font-weight:bold;">
+                                SURAT PERINGATAN {{ sp_level_romawi }}
+                            </h1>
+                            <p style="margin:8px 0 0; font-size:14px; color:#ffffff; opacity:0.9;">
+                                SPARTA Building Management System
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding:32px 24px;">
+                            <p style="margin:0 0 16px; font-size:15px; color:#333333; line-height:1.6;">
+                                <strong>{{ greeting }},</strong>
+                            </p>
+                            
+                            <p style="margin:0 0 20px; font-size:15px; color:#333333; line-height:1.6;">
+                                Yth. <strong>{{ nama_kontraktor }}</strong>,
+                            </p>
+                            
+                            <p style="margin:0 0 24px; font-size:15px; color:#333333; line-height:1.6;">
+                                Bersama ini kami sampaikan <strong>Surat Peringatan {{ sp_level_romawi }}</strong> yang telah disetujui oleh Branch Building &amp; Maintenance Manager.
+                                Surat ini berkaitan dengan proyek berikut:
+                            </p>
+                            
+                            <!-- Info Box -->
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f8f9fa; border-left:4px solid #E31E24; margin-bottom:24px;">
+                                <tr>
+                                    <td style="padding:20px;">
+                                        <table role="presentation" width="100%" cellspacing="0" cellpadding="4">
+                                            <tr>
+                                                <td style="font-size:14px; color:#666; width:40%;">Nomor Surat:</td>
+                                                <td style="font-size:14px; color:#1b1b1b; font-weight:600;">{{ nomor_surat }}</td>
+                                            </tr>
+                                            {% if nomor_ulok %}
+                                            <tr>
+                                                <td style="font-size:14px; color:#666;">Nomor ULOK:</td>
+                                                <td style="font-size:14px; color:#1b1b1b; font-weight:600;">{{ nomor_ulok }}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if nama_toko %}
+                                            <tr>
+                                                <td style="font-size:14px; color:#666;">Nama Toko:</td>
+                                                <td style="font-size:14px; color:#1b1b1b; font-weight:600;">{{ nama_toko }}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if kode_toko %}
+                                            <tr>
+                                                <td style="font-size:14px; color:#666;">Kode Toko:</td>
+                                                <td style="font-size:14px; color:#1b1b1b; font-weight:600;">{{ kode_toko }}</td>
+                                            </tr>
+                                            {% endif %}
+                                            <tr>
+                                                <td style="font-size:14px; color:#666;">Cabang:</td>
+                                                <td style="font-size:14px; color:#1b1b1b; font-weight:600;">{{ cabang }}</td>
+                                            </tr>
+                                            {% if nomor_spk %}
+                                            <tr>
+                                                <td style="font-size:14px; color:#666;">Nomor SPK:</td>
+                                                <td style="font-size:14px; color:#1b1b1b; font-weight:600;">{{ nomor_spk }}</td>
+                                            </tr>
+                                            {% endif %}
+                                            <tr>
+                                                <td style="font-size:14px; color:#666;">Alasan SP:</td>
+                                                <td style="font-size:14px; color:#E31E24; font-weight:600;">{{ alasan_sp_text }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size:14px; color:#666;">Masa Berlaku:</td>
+                                                <td style="font-size:14px; color:#1b1b1b; font-weight:600;">6 Bulan (s/d {{ tanggal_expired }})</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            {% if catatan %}
+                            <div style="margin-bottom:24px; padding:16px; background:#fff3cd; border-left:4px solid#ffc107; border-radius:4px;">
+                                <p style="margin:0 0 8px; font-size:13px; color:#856404; font-weight:600; text-transform:uppercase;">Catatan:</p>
+                                <p style="margin:0; font-size:14px; color:#856404; line-height:1.5;">{{ catatan }}</p>
+                            </div>
+                            {% endif %}
+                            
+                            <p style="margin:0 0 24px; font-size:15px; color:#333333; line-height:1.6;">
+                                PDF resmi Surat Peringatan kami lampirkan pada email ini.
+                            </p>
+                            
+                            <!-- CTA Button -->
+                            <table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 auto 24px;">
+                                <tr>
+                                    <td style="border-radius:6px; background:#E31E24;">
+                                        <a href="{{ acknowledge_url }}" 
+                                           target="_blank"
+                                           style="display:inline-block; padding:14px 32px; color:#ffffff; text-decoration:none; font-size:15px; font-weight:600; border-radius:6px;">
+                                            Buka & Konfirmasi Penerimaan
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <p style="margin:0 0 8px; font-size:13px; color:#666; text-align:center;">
+                                Atau copy link berikut ke browser Anda:
+                            </p>
+                            <p style="margin:0 0 24px; font-size:12px; color:#007bff; text-align:center; word-break:break-all;">
+                                {{ acknowledge_url }}
+                            </p>
+                            
+                            <!-- Footer Note -->
+                            <hr style="border:none; border-top:1px solid #e0e0e0; margin:24px 0;" />
+                            
+                            <p style="margin:0 0 12px; font-size:14px; color:#333333; line-height:1.6;">
+                                Terima kasih atas perhatian dan kerja sama Anda dalam meningkatkan kualitas pelayanan.
+                            </p>
+                            
+                            <p style="margin:0 0 4px; font-size:13px; color:#666;">
+                                Hormat kami,
+                            </p>
+                            <p style="margin:0; font-size:14px; color:#1b1b1b; font-weight:600;">
+                                Branch Building &amp; Maintenance Manager {{ cabang }}
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background:#f8f9fa; padding:16px 24px; border-top:1px solid #e0e0e0;">
+                            <p style="margin:0 0 4px; font-size:11px; color:#999; text-align:center;">
+                                Email ini dikirim secara otomatis oleh sistem SPARTA Building
+                            </p>
+                            <p style="margin:0; font-size:11px; color:#999; text-align:center;">
+                                Dikirim pada: {{ sent_at }} WIB
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

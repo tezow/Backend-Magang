@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notifikasi SPK Ditolak</title>
+</head>
+<body style="margin:0; padding:0; font-family: Arial, Helvetica, sans-serif; background:#f5f5f5;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f5f5f5; padding:24px;">
+        <tr>
+            <td align="center">
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background:#ffffff; border-radius:8px; overflow:hidden;">
+                    <tr>
+                        <td style="padding:24px;">
+                            <h2 style="margin:0 0 12px; font-size:20px; color:#1b1b1b;">Notifikasi SPK Ditolak</h2>
+                            <p style="margin:0 0 12px; font-size:14px; color:#333333;">
+                                {{ greeting }}.
+                            </p>
+                            <p style="margin:0 0 12px; font-size:14px; color:#333333;">
+                                Yth Bapak/Ibu {{ nama_lengkap }}.
+                            </p>
+                            <p style="margin:0 0 12px; font-size:14px; color:#333333;">
+                                Kami informasikan bahwa pengajuan SPK untuk cabang {{ cabang }} telah ditolak.
+                            </p>
+                            <p style="margin:0 0 12px; font-size:14px; color:#333333;">
+                                Silakan meninjau detail SPK melalui aplikasi Sparta Building pada tautan berikut:
+                                <a href="https://building.sparta-alfamart.web.id/">https://building.sparta-alfamart.web.id/</a>
+                            </p>
+                            <p style="margin:0 0 12px; font-size:14px; color:#333333;">
+                                Terima kasih atas perhatian dan kerja samanya.
+                            </p>
+                            <p style="margin:0; font-size:12px; color:#666666;">
+                                Dikirim pada: {{ sent_at }} WIB
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

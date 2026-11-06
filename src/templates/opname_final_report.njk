@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 14mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #1f2937;
+      margin: 0;
+      position: relative;
+    }
+
+    .watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 320px;
+      transform: translate(-50%, -50%);
+      opacity: 0.08;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #d71920;
+      color: #ffffff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-logo {
+      height: 28px;
+    }
+
+    .header-right-logo {
+      height: 32px;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .header-subtitle {
+      font-size: 11px;
+      margin: 2px 0 0;
+      opacity: 0.9;
+    }
+
+    .meta {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+
+    .meta td {
+      border: 1px solid #c7cbd1;
+      padding: 6px 8px;
+      vertical-align: top;
+    }
+
+    .meta .label {
+      width: 170px;
+      font-weight: 600;
+      background: #f6f8fb;
+    }
+
+    .items {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+
+    .num {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .opname-table {
+      table-layout: fixed;
+      font-size: 9px;
+    }
+
+    .opname-table th,
+    .opname-table td {
+      padding: 4px 5px;
+      vertical-align: top;
+      overflow-wrap: normal;
+      word-break: normal;
+    }
+
+    .opname-table .no-col {
+      width: 28px;
+    }
+
+    .opname-table .work-col {
+      width: 31%;
+      line-height: 1.35;
+    }
+
+    .opname-table .unit-col {
+      width: 38px;
+    }
+
+    .opname-table .volume-col {
+      width: 55px;
+    }
+
+    .opname-table .amount-col {
+      width: 76px;
+      white-space: nowrap;
+    }
+
+    .opname-table .note-col {
+      width: 82px;
+    }
+
+    .photo-row td {
+      background: #fbfdff;
+      border-top: 0;
+      padding: 6px 8px;
+    }
+
+    .photo-wrap {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .photo-label {
+      min-width: 78px;
+      font-size: 9px;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      padding-top: 2px;
+    }
+
+    .item-photo {
+      width: 104px;
+      height: 78px;
+      object-fit: cover;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      background: #f8fafc;
+    }
+
+    .photo-placeholder {
+      font-size: 9px;
+      color: #94a3b8;
+      line-height: 1.25;
+      padding-top: 2px;
+    }
+
+    .summary {
+      margin-top: 10px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .summary td {
+      border: 1px solid #c7cbd1;
+      padding: 6px 8px;
+    }
+
+    .summary .label {
+      width: 220px;
+      background: #f6f8fb;
+      font-weight: 600;
+    }
+
+    .summary-caption {
+      margin: 14px 0 6px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .summary .muted-note {
+      display: block;
+      margin-top: 3px;
+      color: #64748b;
+      font-size: 9px;
+      line-height: 1.35;
+      white-space: normal;
+      font-weight: 400;
+    }
+
+    .summary.final-summary {
+      margin-top: 6px;
+      border-top: 2px solid #475569;
+    }
+
+    .summary.final-summary .label {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    .summary.final-summary .grand-final td {
+      background: #f1f5f9;
+      font-weight: 800;
+    }
+
+    .category-summary {
+      width: 42%;
+      margin: 8px 0 18px auto;
+      border-collapse: collapse;
+      font-size: 9px;
+    }
+
+    .category-summary td {
+      border: 1.2px solid #cbd5e1;
+      padding: 5px 7px;
+    }
+
+    .category-summary .label {
+      background: #f8fafc;
+      color: #1f2937;
+      font-weight: 700;
+      text-align: left;
+    }
+
+    .category-summary .amount {
+      text-align: right;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
+    .category-summary .grand td {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    .footer {
+      margin-top: 14px;
+      font-size: 10px;
+      color: #6b7280;
+      text-align: right;
+    }
+
+    .section-title {
+      margin: 0 0 6px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #d71920;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .category-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: #d71920;
+      margin-top: 14px;
+      padding: 6px 0 4px;
+      border-bottom: 1px solid #d71920;
+      text-transform: uppercase;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    {{ sparta_pdf_css() | safe }}
+  </style>
+</head>
+<body>
+  {% macro financial_summary(summary) %}
+  <table class="category-summary">
+    <tr>
+      <td class="label">Total</td>
+      <td class="amount">{{ summary.total_formatted }}</td>
+    </tr>
+    <tr>
+      <td class="label">Pembulatan</td>
+      <td class="amount">{{ summary.pembulatan_formatted }}</td>
+    </tr>
+    <tr>
+      <td class="label">PPN 11%</td>
+      <td class="amount">{{ summary.ppn_formatted }}</td>
+    </tr>
+    <tr class="grand">
+      <td class="label">Grand Total</td>
+      <td class="amount">{{ summary.grand_total_formatted }}</td>
+    </tr>
+  </table>
+  {% endmacro %}
+
+  {% if watermark_logo_path %}
+  <img src="{{ watermark_logo_path }}" class="watermark" alt="watermark" />
+  {% endif %}
+  {% set opname_label = document_label or "Opname" %}
+  {{ sparta_header("Laporan " ~ opname_label, toko.nomor_ulok ~ " - " ~ (toko.nama_toko or '-')) | safe }}
+
+  <div class="section-title">Informasi {{ opname_label }}</div>
+
+  <table class="meta">
+    <tr>
+      <td class="label">Tanggal {{ opname_label }}</td>
+      <td>{{ created_at_formatted }}</td>
+      <td class="label">Email Pembuat</td>
+      <td>{{ opname_final.email_pembuat or '-' }}</td>
+    </tr>
+    <tr>
+      <td class="label">Tanggal Generate PDF</td>
+      <td>{{ generated_at }}</td>
+      <td class="label">ID {{ opname_label }}</td>
+      <td>{{ opname_final.id }}</td>
+    </tr>
+    <tr>
+      <td class="label">Status {{ opname_label }}</td>
+      <td>{{ opname_final.status_opname_final }}</td>
+      <td class="label">Aksi</td>
+      <td>{{ opname_final.aksi or '-' }}</td>
+    </tr>
+    <tr>
+      <td class="label">Nomor ULOK</td>
+      <td>{{ toko.nomor_ulok }}</td>
+      <td class="label">Nama Toko</td>
+      <td>{{ toko.nama_toko or '-' }}</td>
+    </tr>
+    <tr>
+      <td class="label">Proyek</td>
+      <td>{{ toko.proyek or '-' }}</td>
+      <td class="label">Cabang</td>
+      <td>{{ toko.cabang or '-' }}</td>
+    </tr>
+  </table>
+
+  {% for group in grouped_items_list %}
+  <div class="category-header">{{ loop.index }}. {{ group.category }}</div>
+  <table class="items opname-table">
+    <thead>
+      <tr>
+        <th class="no-col">No</th>
+        <th class="work-col">Jenis Pekerjaan</th>
+        <th class="unit-col">Satuan</th>
+        <th class="volume-col">Volume RAB</th>
+        <th class="volume-col">Volume Akhir</th>
+        <th class="volume-col">Selisih Vol</th>
+        <th class="amount-col">Total RAB</th>
+        <th class="amount-col">Total Selisih</th>
+        <th class="note-col">Catatan</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in group.items %}
+      <tr>
+        <td class="no-col">{{ loop.index }}</td>
+        <td class="work-col">{{ item.jenis_pekerjaan }}</td>
+        <td class="unit-col">{{ item.satuan }}</td>
+        <td class="volume-col">{{ item.volume_rab }}</td>
+        <td class="volume-col">{{ item.volume_akhir }}</td>
+        <td class="volume-col">{{ item.selisih_volume }}</td>
+        <td class="amount-col">{{ item.total_harga_rab_formatted }}</td>
+        <td class="amount-col">{{ item.total_selisih_formatted }}</td>
+        <td>{{ item.catatan or '-' }}</td>
+      </tr>
+      {% if item.foto_data_url %}
+      <tr class="photo-row">
+        <td colspan="9">
+          <div class="photo-wrap">
+            <div class="photo-label">Dokumentasi</div>
+            <img class="item-photo" src="{{ item.foto_data_url }}" alt="Foto opname {{ loop.index }}" />
+          </div>
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endfor %}
+  {% if grouped_items_list.length > 0 %}
+  {{ financial_summary(opname_summary) }}
+  {% endif %}
+  {% if grouped_items_list.length === 0 %}
+  <table class="items">
+    <tr>
+      <td class="center">Belum ada item opname.</td>
+    </tr>
+  </table>
+  {% endif %}
+
+  <div class="page-break"></div>
+  {{ sparta_header("Lampiran RAB (Penawaran)", toko.nomor_ulok ~ " - " ~ (toko.nama_toko or '-')) | safe }}
+  <p class="section-title">Daftar RAB (Penawaran)</p>
+
+  {% for group in rab_grouped_items_list %}
+  <div class="category-header">{{ loop.index }}. {{ group.category }}</div>
+  <table class="items opname-table">
+    <thead>
+      <tr>
+        <th class="no-col">No</th>
+        <th class="work-col">Jenis Pekerjaan</th>
+        <th class="unit-col">Satuan</th>
+        <th class="volume-col">Volume</th>
+        <th class="money-col">Harga Material</th>
+        <th class="money-col">Harga Upah</th>
+        <th class="money-col">Total Material</th>
+        <th class="money-col">Total Upah</th>
+        <th class="money-col">Total Harga</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in group.items %}
+      <tr>
+        <td class="no-col">{{ loop.index }}</td>
+        <td class="work-col">{{ item.jenis_pekerjaan }}</td>
+        <td class="unit-col">{{ item.satuan }}</td>
+        <td class="volume-col">{{ item.volume_formatted }}</td>
+        <td class="money-col rab-money-col">{{ item.harga_material_formatted }}</td>
+        <td class="money-col rab-money-col">{{ item.harga_upah_formatted }}</td>
+        <td class="money-col rab-money-col">{{ item.total_material_formatted }}</td>
+        <td class="money-col rab-money-col">{{ item.total_upah_formatted }}</td>
+        <td class="money-col rab-money-col">{{ item.total_harga_formatted }}</td>
+      </tr>
+      {% if item.catatan %}
+      <tr>
+        <td colspan="9">Catatan: {{ item.catatan }}</td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endfor %}
+  {% if rab_grouped_items_list.length > 0 %}
+  {{ financial_summary(rab_summary) }}
+  {% endif %}
+  {% if rab_grouped_items_list.length === 0 %}
+  <table class="items">
+    <tr>
+      <td class="center">Belum ada item RAB.</td>
+    </tr>
+  </table>
+  {% endif %}
+
+  <div class="page-break"></div>
+  {{ sparta_header("Daftar Instruksi Lapangan", toko.nomor_ulok ~ " - " ~ (toko.nama_toko or '-')) | safe }}
+  <p class="section-title">Daftar Instruksi Lapangan</p>
+
+  {% for group in instruksi_lapangan_groups %}
+  <div class="category-header">{{ loop.index }}. {{ group.category }}</div>
+  <table class="items">
+    <thead>
+      <tr>
+        <th class="no-col">No</th>
+        <th class="work-col">Jenis Pekerjaan</th>
+        <th class="unit-col">Satuan</th>
+        <th class="volume-col">Volume Akhir</th>
+        <th class="money-col">Harga Material</th>
+        <th class="money-col">Harga Upah</th>
+        <th class="money-col">Total Material</th>
+        <th class="money-col">Total Upah</th>
+        <th class="money-col">Total Harga</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in group.items %}
+      <tr>
+        <td class="no-col">{{ loop.index }}</td>
+        <td class="work-col">{{ item.jenis_pekerjaan }}</td>
+        <td class="unit-col">{{ item.satuan }}</td>
+        <td class="volume-col">{{ item.volume }}</td>
+        <td class="money-col">{{ item.harga_material_formatted }}</td>
+        <td class="money-col">{{ item.harga_upah_formatted }}</td>
+        <td class="money-col">{{ item.total_material_formatted }}</td>
+        <td class="money-col">{{ item.total_upah_formatted }}</td>
+        <td class="money-col">{{ item.total_harga_formatted }}</td>
+      </tr>
+      {% if item.foto_data_url %}
+      <tr class="photo-row">
+        <td colspan="9">
+          <div class="photo-wrap">
+            <div class="photo-label">Dokumentasi</div>
+            <img class="item-photo" src="{{ item.foto_data_url }}" alt="Foto instruksi lapangan {{ loop.index }}" />
+          </div>
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endfor %}
+  {% if instruksi_lapangan_groups.length > 0 %}
+  {{ financial_summary(instruksi_lapangan_summary) }}
+  {% endif %}
+  {% if instruksi_lapangan_groups.length === 0 %}
+  <table class="items">
+    <tr>
+      <td class="center">Belum ada item instruksi lapangan.</td>
+    </tr>
+  </table>
+  {% endif %}
+
+  <div class="page-break"></div>
+  {{ sparta_header("Kerja Tambah", toko.nomor_ulok ~ " - " ~ (toko.nama_toko or '-')) | safe }}
+  <p class="section-title">Kerja Tambah</p>
+
+  {% for group in kerja_tambah_groups %}
+  <div class="category-header">{{ loop.index }}. {{ group.category }}</div>
+  <table class="items">
+    <thead>
+      <tr>
+        <th class="no-col">No</th>
+        <th class="work-col">Jenis Pekerjaan</th>
+        <th class="unit-col">Satuan</th>
+        <th class="volume-col">Volume RAB</th>
+        <th class="volume-col">Volume Akhir</th>
+        <th class="volume-col">Selisih Vol</th>
+        <th class="amount-col">Total RAB</th>
+        <th class="amount-col">Total Selisih</th>
+        <th class="note-col">Catatan</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in group.items %}
+      <tr>
+        <td class="no-col">{{ loop.index }}</td>
+        <td class="work-col">{{ item.jenis_pekerjaan }}</td>
+        <td class="unit-col">{{ item.satuan }}</td>
+        <td class="volume-col">{{ item.volume_rab }}</td>
+        <td class="volume-col">{{ item.volume_akhir }}</td>
+        <td class="volume-col">{{ item.selisih_volume }}</td>
+        <td class="amount-col">{{ item.total_harga_rab_formatted }}</td>
+        <td class="amount-col">{{ item.total_selisih_formatted }}</td>
+        <td>{{ item.catatan or '-' }}</td>
+      </tr>
+      {% if item.foto_data_url %}
+      <tr class="photo-row">
+        <td colspan="9">
+          <div class="photo-wrap">
+            <div class="photo-label">Dokumentasi</div>
+            <img class="item-photo" src="{{ item.foto_data_url }}" alt="Foto kerja tambah {{ loop.index }}" />
+          </div>
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endfor %}
+  {% if kerja_tambah_groups.length > 0 %}
+  {{ financial_summary(kerja_tambah_summary) }}
+  {% endif %}
+  {% if kerja_tambah_groups.length === 0 %}
+  <table class="items">
+    <tr>
+      <td class="center">Belum ada item kerja tambah.</td>
+    </tr>
+  </table>
+  {% endif %}
+
+  <div class="page-break"></div>
+  {{ sparta_header("Kerja Kurang", toko.nomor_ulok ~ " - " ~ (toko.nama_toko or '-')) | safe }}
+  <p class="section-title">Kerja Kurang</p>
+
+  {% for group in kerja_kurang_groups %}
+  <div class="category-header">{{ loop.index }}. {{ group.category }}</div>
+  <table class="items opname-table">
+    <thead>
+      <tr>
+        <th class="no-col">No</th>
+        <th class="work-col">Jenis Pekerjaan</th>
+        <th class="unit-col">Satuan</th>
+        <th class="volume-col">Volume RAB</th>
+        <th class="volume-col">Volume Akhir</th>
+        <th class="volume-col">Selisih Vol</th>
+        <th class="amount-col">Total RAB</th>
+        <th class="amount-col">Total Selisih</th>
+        <th class="note-col">Catatan</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in group.items %}
+      <tr>
+        <td class="no-col">{{ loop.index }}</td>
+        <td class="work-col">{{ item.jenis_pekerjaan }}</td>
+        <td class="unit-col">{{ item.satuan }}</td>
+        <td class="volume-col">{{ item.volume_rab }}</td>
+        <td class="volume-col">{{ item.volume_akhir }}</td>
+        <td class="volume-col">{{ item.selisih_volume }}</td>
+        <td class="amount-col">{{ item.total_harga_rab_formatted }}</td>
+        <td class="amount-col">{{ item.total_selisih_formatted }}</td>
+        <td>{{ item.catatan or '-' }}</td>
+      </tr>
+      {% if item.foto_data_url %}
+      <tr class="photo-row">
+        <td colspan="9">
+          <div class="photo-wrap">
+            <div class="photo-label">Dokumentasi</div>
+            <img class="item-photo" src="{{ item.foto_data_url }}" alt="Foto kerja kurang {{ loop.index }}" />
+          </div>
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endfor %}
+  {% if kerja_kurang_groups.length > 0 %}
+  {{ financial_summary(kerja_kurang_summary) }}
+  {% endif %}
+  {% if kerja_kurang_groups.length === 0 %}
+  <table class="items">
+    <tr>
+      <td class="center">Belum ada item kerja kurang.</td>
+    </tr>
+  </table>
+  {% endif %}
+
+  <div class="page-break"></div>
+  {{ sparta_header("Rekap Total Keseluruhan", toko.nomor_ulok ~ " - " ~ (toko.nama_toko or '-')) | safe }}
+  <p class="section-title">Rekap Total Keseluruhan</p>
+
+  <div class="summary-caption">Komponen KTK</div>
+  <table class="summary">
+    <tr>
+      <td class="label">RAB/Penawaran Final</td>
+      <td class="num">{{ grand_total_final_rab_formatted }}</td>
+    </tr>
+    <tr>
+      <td class="label">Instruksi Lapangan</td>
+      <td class="num">{{ grand_total_il_formatted }}</td>
+    </tr>
+    <tr>
+      <td class="label">Kerja Tambah</td>
+      <td class="num">{{ grand_total_kerja_tambah_formatted }}</td>
+    </tr>
+    <tr>
+      <td class="label">Kerja Kurang</td>
+      <td class="num">{{ grand_total_kerja_kurang_formatted }}</td>
+    </tr>
+    <tr>
+      <td class="label">Denda Keterlambatan</td>
+      <td class="num">
+        {{ nilai_denda_formatted }}{% if hari_denda > 0 %} ({{ hari_denda }} hari){% endif %}
+        {% if denda_allocation_note %}
+        <span class="muted-note">{{ denda_allocation_note }}</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% if tanggal_akhir_spk_denda_formatted != '-' or tanggal_serah_terima_denda_formatted != '-' %}
+    <tr>
+      <td class="label">Periode Denda</td>
+      <td class="num">
+        {% if tanggal_akhir_spk_denda_formatted != '-' %}Akhir SPK: {{ tanggal_akhir_spk_denda_formatted }}{% endif %}
+        {% if tanggal_akhir_spk_denda_formatted != '-' and tanggal_serah_terima_denda_formatted != '-' %} | {% endif %}
+        {% if tanggal_serah_terima_denda_formatted != '-' %}ST: {{ tanggal_serah_terima_denda_formatted }}{% endif %}
+      </td>
+    </tr>
+    {% endif %}
+  </table>
+
+  <div class="summary-caption">Ringkasan Final</div>
+  <table class="summary final-summary">
+    <tr>
+      <td class="label">RAB/Penawaran Final</td>
+      <td class="num">{{ grand_total_final_rab_formatted }}</td>
+    </tr>
+    <tr class="grand-final">
+      <td class="label">Grand Total KTK Final</td>
+      <td class="num">{{ total_opname_final_formatted }}</td>
+    </tr>
+    {% if selisih_final_rab_ktk_raw > 0 %}
+    <tr>
+      <td class="label">Selisih (Kerja Tambah)</td>
+      <td class="num">{{ selisih_final_rab_ktk_abs_formatted }}</td>
+    </tr>
+    {% elif selisih_final_rab_ktk_raw < 0 %}
+    <tr>
+      <td class="label">Selisih (Kerja Kurang)</td>
+      <td class="num">{{ selisih_final_rab_ktk_abs_formatted }}</td>
+    </tr>
+    {% endif %}
+  </table>
+
+  <div class="page-break"></div>
+  {{ sparta_header("Tanda Tangan " ~ opname_label, toko.nomor_ulok ~ " - " ~ (toko.nama_toko or '-')) | safe }}
+  <p class="section-title">Tanda Tangan</p>
+
+  <table class="approval-table">
+    <tr>
+      <td style="width:{{ '33.33%' if skip_bm_approval else '25%' }}; vertical-align: top;">
+        <div class="approval-title">DIBUAT</div>
+        <div class="approval-box">
+          {{ creator_details | safe }}
+          <div class="approval-role">Branch Building Support</div>
+        </div>
+      </td>
+      <td style="width:{{ '33.33%' if skip_bm_approval else '25%' }}; vertical-align: top;">
+        <div class="approval-title">MENGETAHUI</div>
+        <div class="approval-box">
+          {{ coordinator_approval_details | safe }}
+          <div class="approval-role">Branch Building Coordinator</div>
+        </div>
+      </td>
+      {% if not skip_bm_approval %}
+      <td style="width:25%; vertical-align: top;">
+        <div class="approval-title">MENYETUJUI</div>
+        <div class="approval-box">
+          {{ manager_approval_details | safe }}
+          <div class="approval-role">Building &amp; Maintenance Manager</div>
+        </div>
+      </td>
+      {% endif %}
+      <td style="width:{{ '33.33%' if skip_bm_approval else '25%' }}; vertical-align: top;">
+        <div class="approval-title">MENYETUJUI</div>
+        <div class="approval-box">
+          {{ director_approval_details | safe }}
+          <div class="approval-role">Direktur Kontraktor</div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <div class="footer">
+    Digenerate otomatis oleh sistem SPARTA pada {{ generated_at }}
+  </div>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    @page {
+      size: A4;
+      margin: 24mm 20mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: #1f1f1f;
+      font-size: 13px;
+      line-height: 1.45;
+      margin: 0;
+      position: relative;
+    }
+
+    .watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 58%;
+      opacity: 0.08;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-alfamart {
+      width: 140px;
+      height: auto;
+    }
+
+    .header-location {
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      margin: 8px 0 22px;
+      text-decoration: underline;
+    }
+
+    .lead {
+      margin: 0 0 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 16px;
+      font-size: 12.5px;
+    }
+
+    td {
+      border: 1px solid #3a3a3a;
+      padding: 8px 10px;
+      vertical-align: top;
+    }
+
+    td.label {
+      width: 42%;
+      background: #f4f4f4;
+      font-weight: 600;
+      color: #6a6a6a;
+    }
+
+    .closing {
+      margin-top: 10px;
+    }
+
+    .signature-wrapper {
+      margin-top: 48px;
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .signature-block {
+      width: 48%;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .signature-title {
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .timestamp {
+      margin-top: 12px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .signer {
+      margin-top: 46px;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+    {{ sparta_pdf_css() | safe }}
+  </style>
+</head>
+<body>
+  {% if logo_watermark %}
+  <img class="watermark" src="{{ logo_watermark }}" alt="Watermark" />
+  {% endif %}
+
+  <div class="content">
+  {{ sparta_header("Form Permintaan Perpanjangan SPK", cabang_label ~ ", " ~ tanggal_surat) | safe }}
+
+  <div class="section-title">Informasi Perpanjangan SPK</div>
+
+  <p class="lead">Dengan hormat,</p>
+  <p class="lead">Bersama ini kami sampaikan detail pengajuan perpanjangan Surat Perintah Kerja (SPK) sebagai berikut:</p>
+
+  <table class="info-table">
+    <tr>
+      <td class="label">Nomor ULOK</td>
+      <td>: {{ nomor_ulok }}</td>
+    </tr>
+    {% if not nomor_spk_sipil and not nomor_spk_me %}
+    <tr>
+      <td class="label">Nomor SPK</td>
+      <td>: {{ nomor_spk }}</td>
+    </tr>
+    {% endif %}
+    {% if nomor_spk_sipil %}
+    <tr>
+      <td class="label">Nomor SPK (Sipil)</td>
+      <td>: {{ nomor_spk_sipil }}</td>
+    </tr>
+    {% endif %}
+    {% if nomor_spk_me %}
+    <tr>
+      <td class="label">Nomor SPK (ME)</td>
+      <td>: {{ nomor_spk_me }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td class="label">Tanggal SPK Akhir</td>
+      <td>: {{ tanggal_spk_akhir }}</td>
+    </tr>
+    <tr>
+      <td class="label">Pertambahan Hari</td>
+      <td>: {{ pertambahan_hari }}</td>
+    </tr>
+    <tr>
+      <td class="label">Tanggal SPK Akhir (Setelah Perpanjangan)</td>
+      <td>: {{ tanggal_spk_akhir_setelah_perpanjangan }}</td>
+    </tr>
+    <tr>
+      <td class="label">Alasan Pertambahan</td>
+      <td>: {{ alasan_perpanjangan }}</td>
+    </tr>
+  </table>
+
+  <p class="closing">Demikian formulir permintaan ini kami sampaikan. Atas perhatian dan kerja samanya kami ucapkan terima kasih.</p>
+
+  <table class="approval-table">
+    <tr>
+      <td style="width:50%; vertical-align: top;">
+        <div class="approval-title">DIBUAT</div>
+        <div class="approval-box">
+          <div class="approval-date">Dibuat pada: {{ dibuat_pada }}</div>
+          <div class="approval-name">{{ dibuat_oleh }}</div>
+          <div class="approval-role">Branch Building &amp; Maintenance Manager</div>
+        </div>
+      </td>
+      <td style="width:50%; vertical-align: top;">
+        <div class="approval-title">DISETUJUI</div>
+        <div class="approval-box">
+          <div class="approval-date">Disetujui pada: {{ disetujui_pada }}</div>
+          <div class="approval-name">{{ disetujui_oleh }}</div>
+          <div class="approval-role">Branch Manager</div>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <div class="footer">Dokumen ini di-generate otomatis oleh sistem SPARTA Building pada {{ tanggal_surat }}</div>
+  </div>
+</body>
+</html>

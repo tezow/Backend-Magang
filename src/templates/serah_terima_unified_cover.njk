@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    @page { size: A4; margin: 15mm; }
+    body { font-family: 'Times New Roman', Times, serif; font-size: 12px; color: #000; margin: 0; line-height: 1.5; }
+    .document-title { text-align: center; margin-top: 35px; margin-bottom: 30px; }
+    h1 { font-size: 18px; font-weight: bold; text-transform: uppercase; color: #e30613; margin: 0; padding: 0; }
+    .subtitle { font-size: 12px; margin-top: 6px; color: #475569; font-weight: bold; }
+    .info-table { width: 100%; border: none; margin-bottom: 20px; }
+    .info-table td { border: none; padding: 4px 0; vertical-align: top; }
+    .info-table td:first-child { width: 150px; font-weight: bold; color: #1f2937; }
+    .info-table td:nth-child(2) { width: 10px; }
+    .content-table { width: 100%; border-collapse: collapse; margin-top: 16px; margin-bottom: 20px; }
+    .content-table th, .content-table td { border: 1px solid #aeb4bc; padding: 8px 10px; vertical-align: middle; }
+    .content-table th { background-color: #eef6ff; color: #111827; font-weight: bold; text-align: center; text-transform: uppercase; }
+    .center { text-align: center; }
+    .num { text-align: right; white-space: nowrap; }
+    .paragraph { text-align: justify; margin-bottom: 15px; }
+    .note { margin-top: 20px; font-style: italic; font-size: 11px; }
+    {{ sparta_pdf_css() | safe }}
+  </style>
+</head>
+<body>
+  {{ sparta_header("Berita Acara Serah Terima", nomor_ulok ~ " - " ~ (nama_toko or '-')) | safe }}
+  
+  <div class="document-title">
+    <h1>BERITA ACARA SERAH TERIMA</h1>
+    <div class="subtitle">NOMOR ULOK: {{ nomor_ulok }}</div>
+  </div>
+
+  <div class="paragraph">
+    Pada hari ini, bersama dengan diterbitkannya dokumen ini, diserahkan hasil pekerjaan secara gabungan dengan rincian sebagai berikut:
+  </div>
+
+  <table class="info-table">
+    <tr>
+      <td>Tanggal Serah Terima</td>
+      <td>:</td>
+      <td>{{ created_at_formatted }}</td>
+    </tr>
+    <tr>
+      <td>Nama Toko</td>
+      <td>:</td>
+      <td>{{ nama_toko or '-' }}</td>
+    </tr>
+    <tr>
+      <td>Total Lingkup Pekerjaan</td>
+      <td>:</td>
+      <td>{{ scope_count }} Lingkup ({{ scope_order }})</td>
+    </tr>
+  </table>
+
+  <div class="paragraph">
+    Adapun rincian rekapitulasi dari masing-masing lingkup pekerjaan adalah sebagai berikut:
+  </div>
+
+  <table class="content-table">
+    <thead>
+      <tr>
+        <th style="width: 40px;">No</th>
+        <th>Lingkup Pekerjaan</th>
+        <th>Kode Toko</th>
+        <th>Kontraktor</th>
+        <th style="width: 80px;">Total Item</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for scope in scopes %}
+      <tr>
+        <td class="center">{{ loop.index }}</td>
+        <td class="center" style="font-weight: bold;">{{ scope.lingkup_pekerjaan or '-' }}</td>
+        <td class="center">{{ scope.kode_toko or '-' }}</td>
+        <td>{{ scope.nama_kontraktor or '-' }}</td>
+        <td class="center">{{ scope.item_count }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4" class="num" style="font-weight: bold; padding-right: 15px;">TOTAL KESELURUHAN</td>
+        <td class="center" style="font-weight: bold;">{{ total_items }}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="paragraph">
+    Demikian Berita Acara Serah Terima ini dibuat untuk dipergunakan sebagaimana mestinya. Rincian pekerjaan dilampirkan pada halaman berikutnya untuk mempermudah proses pemeriksaan.
+  </div>
+
+  <div class="note">
+    * Catatan: Rincian pekerjaan disusun secara berurutan mulai dari lingkup {{ scope_order }}. Setiap lampiran memiliki halamannya tersendiri.
+  </div>
+</body>
+</html>

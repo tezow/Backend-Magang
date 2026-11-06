@@ -1,0 +1,42 @@
+-- Name: request_intervensi; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.request_intervensi (
+    id integer NOT NULL,
+    nomor_request character varying(80) NOT NULL,
+    jenis_intervensi character varying(40) NOT NULL,
+    dokumen_sumber_id integer,
+    dokumen_sumber_tipe character varying(60) NOT NULL,
+    id_toko integer,
+    nomor_ulok character varying(100) NOT NULL,
+    nama_toko character varying(255),
+    cabang character varying(255),
+    lingkup_pekerjaan character varying(255),
+    proyek character varying(255),
+    status_sumber_sebelum text,
+    target_status text,
+    tanggal_sebelum date,
+    target_tanggal date,
+    alasan text NOT NULL,
+    link_lampiran text,
+    link_pdf_ba text,
+    status_request character varying(60) NOT NULL,
+    current_approval_stage character varying(60) NOT NULL,
+    submitted_by character varying(255) NOT NULL,
+    submitted_role character varying(255),
+    bm_approved_by character varying(255),
+    bm_approved_at timestamp without time zone,
+    sbcs_approved_by character varying(255),
+    sbcs_approved_at timestamp without time zone,
+    regional_manager_approved_by character varying(255),
+    regional_manager_approved_at timestamp without time zone,
+    rejected_by character varying(255),
+    rejected_at timestamp without time zone,
+    rejection_reason text,
+    reject_disposition character varying(20),
+    revision_count integer DEFAULT 0 NOT NULL,
+    executed_at timestamp without time zone,
+    created_at timestamp without time zone DEFAULT timezone('Asia/Jakarta'::text, now()) NOT NULL,
+    updated_at timestamp without time zone DEFAULT timezone('Asia/Jakarta'::text, now()) NOT NULL
+);
+

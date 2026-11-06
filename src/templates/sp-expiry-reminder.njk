@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reminder: Surat Peringatan Akan Expired</title>
+</head>
+<body style="margin:0; padding:0; font-family: Arial, Helvetica, sans-serif; background:#f5f5f5;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f5f5f5; padding:24px;">
+        <tr>
+            <td align="center">
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:{% if urgency == 'critical' %}#DC2626{% elif urgency == 'high' %}#F59E0B{% else %}#3B82F6{% endif %}; padding:20px 24px; text-align:center;">
+                            <h1 style="margin:0; font-size:22px; color:#ffffff; font-weight:bold;">
+                                {% if urgency == 'critical' %}
+                                    🚨 URGENT: SP Akan Expired Besok!
+                                {% elif urgency == 'high' %}
+                                    ⚠️ PERHATIAN: SP Akan Expired Minggu Depan
+                                {% else %}
+                                    ⏰ REMINDER: SP Akan Expired Bulan Depan
+                                {% endif %}
+                            </h1>
+                            <p style="margin:8px 0 0; font-size:14px; color:#ffffff; opacity:0.9;">
+                                SPARTA Building - Expiry Notification
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding:32px 24px;">
+                            <p style="margin:0 0 16px; font-size:15px; color:#333333; line-height:1.6;">
+                                <strong>{{ greeting }},</strong>
+                            </p>
+                            
+                            <p style="margin:0 0 20px; font-size:15px; color:#333333; line-height:1.6;">
+                                Yth. <strong>{{ nama_kontraktor }}</strong>,
+                            </p>
+                            
+                            <p style="margin:0 0 24px; font-size:15px; color:#333333; line-height:1.6;">
+                                Kami ingatkan bahwa <strong>Surat Peringatan {{ sp_level_romawi }}</strong> 
+                                akan <strong style="color:#E31E24;">expired dalam {{ days_left }} hari</strong> ({{ tanggal_expired }}).
+                            </p>
+                            
+                            <!-- Info Box -->
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f8f9fa; border-left:4px solid {% if urgency == 'critical' %}#DC2626{% elif urgency == 'high' %}#F59E0B{% else %}#3B82F6{% endif %}; margin-bottom:24px;">
+                                <tr>
+                                    <td style="padding:20px;">
+                                        <table role="presentation" width="100%" cellspacing="0" cellpadding="4">
+                                            <tr>
+                                                <td style="font-size:14px; color:#666; width:40%;">Nomor Surat:</td>
+                                                <td style="font-size:14px; color:#1b1b1b; font-weight:600;">{{ nomor_surat }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size:14px; color:#666;">Nomor ULOK:</td>
+                                                <td style="font-size:14px; color:#1b1b1b; font-weight:600;">{{ nomor_ulok }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size:14px; color:#666;">Cabang:</td>
+                                                <td style="font-size:14px; color:#1b1b1b; font-weight:600;">{{ cabang }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size:14px; color:#666;">Masa Berlaku s/d:</td>
+                                                <td style="font-size:14px; color:#E31E24; font-weight:600;">{{ tanggal_expired }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size:14px; color:#666;">Status Acknowledge:</td>
+                                                <td style="font-size:14px; {% if is_acknowledged %}color:#059669{% else %}color:#F59E0B{% endif %}; font-weight:600;">
+                                                    {% if is_acknowledged %}✓ Sudah Di-acknowledge{% else %}⚠ Belum Di-acknowledge{% endif %}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            {% if not is_acknowledged %}
+                            <div style="margin-bottom:24px; padding:16px; background:#FEF3C7; border-left:4px solid #F59E0B; border-radius:4px;">
+                                <p style="margin:0 0 8px; font-size:13px; color:#92400E; font-weight:600; text-transform:uppercase;">⚠️ ACTION REQUIRED</p>
+                                <p style="margin:0; font-size:14px; color:#92400E; line-height:1.5;">
+                                    Anda belum melakukan acknowledgement untuk SP ini. Mohon segera lakukan acknowledgement sebelum masa berlaku berakhir.
+                                </p>
+                            </div>
+                            {% endif %}
+                            
+                            <p style="margin:0 0 24px; font-size:15px; color:#333333; line-height:1.6;">
+                                {% if urgency == 'critical' %}
+                                    <strong style="color:#DC2626;">SEGERA AMBIL TINDAKAN</strong> untuk memastikan SP ini telah ditindaklanjuti dengan baik.
+                                {% elif urgency == 'high' %}
+                                    Mohon segera tindak lanjuti SP ini dalam waktu dekat.
+                                {% else %}
+                                    Harap mencatat tanggal expiry dan memastikan tindak lanjut yang diperlukan telah dilakukan.
+                                {% endif %}
+                            </p>
+                            
+                            <!-- CTA Button -->
+                            <table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 auto 24px;">
+                                <tr>
+                                    <td style="border-radius:6px; background:{% if urgency == 'critical' %}#DC2626{% elif urgency == 'high' %}#F59E0B{% else %}#3B82F6{% endif %};">
+                                        <a href="{{ acknowledge_url }}" 
+                                           target="_blank"
+                                           style="display:inline-block; padding:14px 32px; color:#ffffff; text-decoration:none; font-size:15px; font-weight:600; border-radius:6px;">
+                                            {% if is_acknowledged %}
+                                                📋 Lihat Detail Surat Peringatan
+                                            {% else %}
+                                                ⚠️ Lihat & Acknowledge Sekarang
+                                            {% endif %}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <p style="margin:0 0 8px; font-size:13px; color:#666; text-align:center;">
+                                Atau copy link berikut ke browser Anda:
+                            </p>
+                            <p style="margin:0 0 24px; font-size:12px; color:#007bff; text-align:center; word-break:break-all;">
+                                {{ acknowledge_url }}
+                            </p>
+                            
+                            <!-- Footer Note -->
+                            <hr style="border:none; border-top:1px solid #e0e0e0; margin:24px 0;" />
+                            
+                            <p style="margin:0 0 12px; font-size:14px; color:#333333; line-height:1.6;">
+                                Reminder ini dikirim secara otomatis untuk memastikan Anda tidak melewatkan masa berlaku SP.
+                            </p>
+                            
+                            <p style="margin:0 0 4px; font-size:13px; color:#666;">
+                                Hormat kami,
+                            </p>
+                            <p style="margin:0; font-size:14px; color:#1b1b1b; font-weight:600;">
+                                SPARTA Building Management System
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background:#f8f9fa; padding:16px 24px; border-top:1px solid #e0e0e0;">
+                            <p style="margin:0 0 4px; font-size:11px; color:#999; text-align:center;">
+                                Email reminder otomatis dari sistem SPARTA Building
+                            </p>
+                            <p style="margin:0; font-size:11px; color:#999; text-align:center;">
+                                Dikirim pada: {{ sent_at }} WIB
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

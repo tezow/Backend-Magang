@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Laporan Dokumen DC</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 15mm 15mm 20mm 15mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header-main {
+      background-color: #dc2626;
+      color: #ffffff;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+
+    .header-alfamart-logo {
+      height: 38px;
+      margin-right: 14px;
+      padding-right: 14px;
+      border-right: 2px solid rgba(255,255,255,0.35);
+    }
+
+    .header-sparta-logo {
+      height: 32px;
+      margin-right: 10px;
+    }
+
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+
+    .header-subtitle {
+      font-size: 11px;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+
+    .info-container {
+      margin-bottom: 20px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 15px;
+    }
+
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .info-table td {
+      padding: 4px 0;
+      vertical-align: top;
+    }
+
+    .info-table td:first-child {
+      width: 120px;
+      font-weight: bold;
+      color: #64748b;
+    }
+
+    .info-table td.colon {
+      width: 20px;
+      text-align: center;
+    }
+
+    .stage-section {
+      margin-bottom: 25px;
+      page-break-inside: avoid;
+    }
+
+    .stage-header {
+      background-color: #f1f5f9;
+      border-left: 4px solid #ef4444;
+      padding: 10px 15px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #1e293b;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stage-progress {
+      font-size: 12px;
+      font-weight: normal;
+      color: #64748b;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9px;
+    }
+
+    .data-table th {
+      background-color: #e2e8f0;
+      color: #334155;
+      font-weight: bold;
+      padding: 8px;
+      text-align: left;
+      border: 1px solid #cbd5e1;
+    }
+
+    .data-table td {
+      padding: 8px;
+      border: 1px solid #cbd5e1;
+      vertical-align: middle;
+    }
+
+    .data-table tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    .status-ada {
+      color: #16a34a;
+      font-weight: bold;
+    }
+
+    .status-kosong {
+      color: #dc2626;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header-main">
+    {% if alfamart_logo_path %}
+    <img src="{{ alfamart_logo_path }}" class="header-alfamart-logo" alt="Alfamart Logo">
+    {% endif %}
+    {% if sparta_logo_path %}
+    <img src="{{ sparta_logo_path }}" class="header-sparta-logo" alt="Building Process">
+    {% endif %}
+    <div>
+      <h1 class="header-title">LAPORAN MONITORING KELENGKAPAN DOKUMEN</h1>
+      <div class="header-subtitle">DC / WAREHOUSE DEVELOPMENT</div>
+    </div>
+  </div>
+
+  <!-- INFORMASI PROYEK -->
+  <div class="info-container">
+    <table class="info-table">
+      <tr>
+        <td>Nama Proyek</td>
+        <td class="colon">:</td>
+        <td colspan="4"><strong>{{ project.archive_name }}</strong></td>
+      </tr>
+      <tr>
+        <td>Tanggal Cetak</td>
+        <td class="colon">:</td>
+        <td colspan="4">{{ generated_at }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- TAHAPAN (STAGES) -->
+  {% for stage in stages %}
+  <div class="stage-section">
+    <div class="stage-header">
+      Tahap {{ stage.stageName }}
+      <span class="stage-progress">Progress: {{ stage.filled }} / {{ stage.total }} ({{ stage.percentage }}%)</span>
+    </div>
+    
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 5%; text-align: center;">No</th>
+          <th style="width: 20%;">Kategori Utama</th>
+          <th style="width: 25%;">Jenis Dokumen</th>
+          <th style="width: 10%; text-align: center;">Status</th>
+          <th style="width: 15%;">Catatan</th>
+          <th style="width: 25%;">Link Drive</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in stage.items %}
+        <tr>
+          <td style="text-align: center;">{{ loop.index }}</td>
+          <td>{{ item.kategori }}</td>
+          <td>{{ item.jenis }}</td>
+          <td style="text-align: center;">
+            {% if item.status %}
+              <span class="status-ada">✔ ADA</span>
+            {% else %}
+              <span class="status-kosong">✘ KOSONG</span>
+            {% endif %}
+          </td>
+          <td>{{ item.notes or '-' }}</td>
+          <td style="word-break: break-all;">
+            {% if item.linkDrive and item.linkDrive.length > 0 %}
+              {% for link in item.linkDrive %}
+                <a href="{{ link }}" style="color: blue; text-decoration: underline;" target="_blank">Buka Dokumen {{ loop.index }}</a>{% if not loop.last %}<br><br>{% endif %}
+              {% endfor %}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+
+</body>
+</html>

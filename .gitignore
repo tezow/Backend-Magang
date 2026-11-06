@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+npm-debug.log*
+token.json
+token_doc.json
+
+.env
+sparta-be.env

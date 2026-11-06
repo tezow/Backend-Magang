@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm 18mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: #1f1f1f;
+      font-size: 12px;
+      line-height: 1.45;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 360px;
+      opacity: 0.08;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      margin: 0 0 4px;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #555;
+      margin: 0 0 6px;
+    }
+
+    .meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .meta-table td {
+      padding: 5px 10px;
+      vertical-align: top;
+      border: none;
+    }
+
+    .meta-table td.label {
+      width: 180px;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 11.5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .data-table th,
+    .data-table td {
+      border: 1px solid #999;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .data-table th {
+      background: #2c3e50;
+      color: #fff;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .data-table tbody tr:nth-child(even) {
+      background: #f7f8fa;
+    }
+
+    .data-table tbody tr:hover {
+      background: #edf0f5;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-progress {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-selesai {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-terlambat {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .summary {
+      margin-top: 14px;
+      font-size: 11.5px;
+      color: #444;
+      position: relative;
+      z-index: 1;
+    }
+
+    .summary-table {
+      border-collapse: collapse;
+      margin-top: 6px;
+      font-size: 11.5px;
+    }
+
+    .summary-table td {
+      padding: 4px 12px 4px 0;
+      border: none;
+    }
+
+    .summary-table td.val {
+      font-weight: 700;
+    }
+
+    .footer {
+      margin-top: 24px;
+      font-size: 10px;
+      color: #888;
+      text-align: center;
+      border-top: 1px solid #ddd;
+      padding-top: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .item-photo-row td {
+      background: #fff;
+      border-top: none;
+      padding: 10px 8px;
+    }
+
+    .item-photo-label {
+      margin-bottom: 6px;
+      font-size: 11px;
+      color: #666;
+      font-weight: 600;
+    }
+
+    .item-photo {
+      max-width: 320px;
+      max-height: 220px;
+      border: 1px solid #d4d4d4;
+      border-radius: 4px;
+      object-fit: contain;
+    }
+
+    .item-photo-missing {
+      display: inline-block;
+      padding: 8px 10px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 4px;
+      color: #64748b;
+      font-size: 10px;
+      background: #f8fafc;
+    }
+    {{ sparta_pdf_css() | safe }}
+  </style>
+</head>
+<body>
+  {% if logo_watermark %}
+  <img class="watermark" src="{{ logo_watermark }}" alt="Watermark" />
+  {% endif %}
+
+  {{ sparta_header("Memo Pengawasan", tanggal_pengawasan) | safe }}
+
+  <div class="section-title">Informasi Pengawasan</div>
+  <table class="meta-table">
+    <tr>
+      <td class="label">PIC Pengawasan</td>
+      <td>: {{ pic_pengawasan_nama or '-' }}</td>
+    </tr>
+    <tr>
+      <td class="label">Tanggal Pengawasan</td>
+      <td>: {{ tanggal_pengawasan }}</td>
+    </tr>
+    <tr>
+      <td class="label">Jumlah Item</td>
+      <td>: {{ items | length }} pekerjaan</td>
+    </tr>
+    <tr>
+      <td class="label">Dibuat Pada</td>
+      <td>: {{ generated_at }}</td>
+    </tr>
+  </table>
+
+  {% if items.length > 0 %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width:35px;text-align:center;">No</th>
+        <th>Kategori Pekerjaan</th>
+        <th>Jenis Pekerjaan</th>
+        <th>Status</th>
+        <th>Catatan</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td style="text-align:center;">{{ loop.index }}</td>
+        <td>{{ item.kategori_pekerjaan }}</td>
+        <td>{{ item.jenis_pekerjaan }}</td>
+        <td>
+          <span class="status-badge status-{{ item.status }}">{{ item.status }}</span>
+        </td>
+        <td>{{ item.catatan or '-' }}</td>
+      </tr>
+      {% if item.dokumentasi_base64 %}
+      <tr class="item-photo-row">
+        <td></td>
+        <td colspan="4">
+          <div class="item-photo-label">Foto Dokumentasi</div>
+          <img class="item-photo" src="{{ item.dokumentasi_base64 }}" alt="Foto dokumentasi item {{ loop.index }}" />
+        </td>
+      </tr>
+      {% elif item.dokumentasi %}
+      <tr class="item-photo-row">
+        <td></td>
+        <td colspan="4">
+          <div class="item-photo-label">Foto Dokumentasi</div>
+          <div class="item-photo-missing">Foto belum bisa dimuat ke PDF. Buka lampiran melalui aplikasi.</div>
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p style="text-align:center;color:#888;margin:30px 0;">Belum ada data pengawasan untuk tanggal ini.</p>
+  {% endif %}
+
+  <div class="section-title">Ringkasan Status</div>
+  <div class="summary">
+    <table class="summary-table">
+      <tr>
+        <td>Progress</td>
+        <td class="val">{{ count_progress }}</td>
+      </tr>
+      <tr>
+        <td>Selesai</td>
+        <td class="val">{{ count_selesai }}</td>
+      </tr>
+      <tr>
+        <td>Terlambat</td>
+        <td class="val">{{ count_terlambat }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    Dokumen ini di-generate otomatis oleh sistem SPARTA Building pada {{ generated_at }}
+  </div>
+</body>
+</html>
